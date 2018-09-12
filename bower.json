@@ -24,6 +24,7 @@
     "bootstrap-colorpicker": "^2.4.0",
     "bootstrap-table": "^1.11.0",
     "bootstrap-datepicker": "^1.6.4",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.47",
     "iCheck": "jquery-icheck#^1.0.2",
     "ekko-lightbox": "^5.0.0",
     "jquery.iframe-transport": "^1.0.1",

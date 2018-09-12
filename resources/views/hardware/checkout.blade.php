@@ -54,29 +54,38 @@
                 @include ('partials.forms.edit.location-select', ['translated_name' => trans('general.location'), 'fieldname' => 'assigned_location', 'style' => 'display:none;', 'required'=>'true'])
 
 
-
-            <!-- Checkout/Checkin Date -->
-            <div class="form-group {{ $errors->has('checkout_at') ? 'error' : '' }}">
-              {{ Form::label('name', trans('admin/hardware/form.checkout_date'), array('class' => 'col-md-3 control-label')) }}
-              <div class="col-md-8">
-                  <div class="input-group date col-md-5" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-end-date="0d">
-                      <input type="text" class="form-control" placeholder="{{ trans('general.select_date') }}" name="checkout_at" id="checkout_at" value="{{ Input::old('checkout_at') }}">
-                      <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                  </div>
-                {!! $errors->first('checkout_at', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}
-              </div>
+              <!-- Checkout/Checkin Date  -->
+              <div class="form-group {{ $errors->has('checkout_at') ? 'error' : '' }}">
+                {{ Form::label('name', trans('admin/hardware/form.checkout_date'), array('class' => 'col-md-3 control-label')) }}
+                <div class="col-md-8">
+                    <div class='col-sm-6'>
+                        <div class="form-group" data-provide="datetimepicker" data-date-format="yyyy-mm-dd hh:ii:ss">
+                            <div class='input-group date' id='checkout_at'>
+                                <input type='text' class="form-control" placeholder="{{ trans('general.select_date') }}" name="checkout_at" value="{{ Input::old('checkout_at') }}">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {!! $errors->first('checkout_at', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}
+                </div>
             </div>
 
             <!-- Expected Checkin Date -->
             <div class="form-group {{ $errors->has('expected_checkin') ? 'error' : '' }}">
-              {{ Form::label('name', trans('admin/hardware/form.expected_checkin'), array('class' => 'col-md-3 control-label')) }}
-              <div class="col-md-8">
-                  <div class="input-group date col-md-5" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-start-date="0d">
-                      <input type="text" class="form-control" placeholder="{{ trans('general.select_date') }}" name="expected_checkin" id="expected_checkin" value="{{ Input::old('expected_checkin') }}">
-                      <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                  </div>
-                {!! $errors->first('expected_checkin', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}
-              </div>
+                {{ Form::label('name', trans('admin/hardware/form.expected_checkin'), array('class' => 'col-md-3 control-label')) }}
+                <div class="col-md-8">
+                    <div class='col-sm-6'>
+                        <div class="form-group" data-provide="datetimepicker" data-date-format="yyyy-mm-dd hh:ii:ss">
+                            <div class='input-group date' id='expected_checkin'>
+                                <input type='text' class="form-control" placeholder="{{ trans('general.select_date') }}" name="expected_checkin" value="{{ Input::old('expected_checkin') }}">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {!! $errors->first('expected_checkin', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}
+                </div>
             </div>
 
             <!-- Note -->
@@ -149,6 +158,19 @@
 //            format: 'yyyy-mm-dd'
 //        });
 
+        $('#checkout_at').datetimepicker({
+          locale: 'pt', // Extract this from the language selection
+            maxDate: new Date(),  // today date
+         //   daysOfWeekDisabled: [0, 6],  // this should be set in the configuration 
+            format: 'YYYY-MM-DD HH:mm:ss'
+        });
+
+        $('#expected_checkin').datetimepicker({
+          locale: 'pt', // Extract this from the language selection
+            minDate: new Date(),  // today date
+         //   daysOfWeekDisabled: [0, 6],  // this should be set in the configuration 
+            format: 'YYYY-MM-DD HH:mm:ss'
+        });
 
     </script>
 @stop

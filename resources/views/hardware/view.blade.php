@@ -411,7 +411,7 @@
                       <tr>
                         <td>{{ trans('admin/hardware/form.expected_checkin') }}</td>
                         <td>
-                          {{ \App\Helpers\Helper::getFormattedDateObject($asset->expected_checkin, 'date', false) }}
+                          {{ \App\Helpers\Helper::getFormattedDateObject($asset->expected_checkin, 'datetime', false) }}
                         </td>
                       </tr>
                     @endif

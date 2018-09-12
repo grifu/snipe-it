@@ -24,7 +24,7 @@ class CreateActionlogTable extends Migration
                 $table->text('filename')->nullable();
                 $table->string('item_type');
                 $table->integer('item_id');  // Replaces asset_id, accessory_id, etc.
-                $table->date('expected_checkin')->nullable()->default(null);
+                $table->datetime('expected_checkin')->nullable()->default(null); // from date to datetime
                 $table->integer('accepted_id')->nullable();
                 $table->timestamps();
                 $table->softDeletes();
