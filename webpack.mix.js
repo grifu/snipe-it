@@ -20,6 +20,7 @@ mix
     'resources/assets/css/font-awesome/font-awesome.min.css',
     './node_modules/icheck/skins/minimal/minimal.css',
     './node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.standalone.css',
+    './node_modules/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker-standalone.css',
     'public/css/bootstrap-tables-sticky-header.css',
     'public/css/overrides.css'
 ],
@@ -42,6 +43,7 @@ mix
     './node_modules/blueimp-file-upload/js/jquery.fileupload.js',
     './node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js',
     './node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.js',
+    './node_modules/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
     './node_modules/icheck/icheck.js',
     './node_modules/ekko-lightbox/dist/ekko-lightbox.js',
     './resources/assets/js/app.js', //this is part of AdminLTE
@@ -51,6 +53,7 @@ mix
     './public/js/dist/all.js');
 
 mix.copy('./public/css/dist/all.css', './public/css/build/all.css').copy('./public/js/dist/all.js', './public/js/build/all.js');
+mix.copy('./public/js/bootstrap/fonts', './public/css/fonts');  // bootstrap datetime fonts
 
 mix.version();
 

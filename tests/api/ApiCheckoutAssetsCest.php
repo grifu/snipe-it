@@ -48,7 +48,7 @@ class ApiCheckoutAssetsCest
                 'type' => 'user'
             ],
             'name' => "Updated Asset Name",
-            'expected_checkin' => Helper::getFormattedDateObject('2018-05-24', 'date')
+            'expected_checkin' => Helper::getFormattedDateObject('2018-05-24 10:30', 'datetime')
         ]);
 
     }
