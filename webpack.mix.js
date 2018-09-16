@@ -56,6 +56,7 @@ mix
 
 mix.copy('./public/css/dist/all.css', './public/css/build/all.css').copy('./public/js/dist/all.js', './public/js/build/all.js');
 mix.copy('./public/js/bootstrap/fonts', './public/css/fonts');  // bootstrap datetime fonts
+mix.copy('./node_modules/eonasdan-bootstrap-datetimepicker/build/css', './public/css');
 
 mix.version();
 
