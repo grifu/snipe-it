@@ -150,27 +150,39 @@
 @section('moar_scripts')
     @include('partials/assets-assigned')
 
+
     <script>
-//        $('#checkout_at').datepicker({
-//            clearBtn: true,
-//            todayHighlight: true,
-//            endDate: '0d',
-//            format: 'yyyy-mm-dd'
-//        });
+
+
+
+        $.fn.datetimepicker.defaults.icons = {
+            time: 'fa fa-clock-o',
+            date: 'fa fa-calendar',
+            up: 'fa fa-chevron-up',
+            down: 'fa fa-chevron-down',
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-dot-circle-o',
+            clear: 'fa fa-trash',
+            close: 'fa fa-times'
+        };
+
+
 
         $('#checkout_at').datetimepicker({
           locale: 'pt', // Extract this from the language selection
             maxDate: new Date(),  // today date
          //   daysOfWeekDisabled: [0, 6],  // this should be set in the configuration 
-            format: 'YYYY-MM-DD HH:mm:ss'
+            format: 'YYYY-MM-DD HH:mm'
         });
 
         $('#expected_checkin').datetimepicker({
+
           locale: 'pt', // Extract this from the language selection
             minDate: new Date(),  // today date
          //   daysOfWeekDisabled: [0, 6],  // this should be set in the configuration 
             format: 'YYYY-MM-DD HH:mm:ss'
-        });
+            
 
-    </script>
+        });
 @stop
