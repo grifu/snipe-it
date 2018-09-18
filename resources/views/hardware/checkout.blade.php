@@ -173,7 +173,7 @@
           locale: 'pt', // Extract this from the language selection
             maxDate: new Date(),  // today date
          //   daysOfWeekDisabled: [0, 6],  // this should be set in the configuration 
-            format: 'YYYY-MM-DD HH:mm'
+            format: 'YYYY-MM-DD HH:mm:ss'
         });
 
         $('#expected_checkin').datetimepicker({
