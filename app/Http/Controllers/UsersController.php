@@ -213,6 +213,21 @@ class UsersController extends Controller
 
     }
 
+
+    public function xica($id)
+    {
+
+        $show_user = User::where('id',$id)->withTrashed()->first();
+        $assets = Asset::where('assigned_to', $id)->where('assigned_type', User::class)->with('model', 'model.category')->get();
+        $licenses = $show_user->licenses()->get();
+        $accessories = $show_user->accessories()->get();
+        $consumables = $show_user->consumables()->get();
+        return view('users/print')->with('assets', $assets)->with('licenses',$licenses)->with('accessories', $accessories)->with('consumables', $consumables)->with('show_user', $show_user);
+
+
+
+    }
+
     /**
      * Validate and save edited user data from edit form.
      *
@@ -412,7 +427,7 @@ class UsersController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v1.0]
      * @return \Illuminate\Http\RedirectResponse
-     */
+     */ 
     public function postBulkEditSave(Request $request)
     {
         $this->authorize('update', User::class);
@@ -479,6 +494,98 @@ class UsersController extends Controller
 
 
     }
+
+
+    /**
+    * Bulk check-in
+    *
+    * @author [Grifu, adaped from A. Gianotto] [<snipe@snipe.net>]
+    * @since [v1.0]
+    * @return \Illuminate\Http\RedirectResponse
+     */
+    public function bulkCheckin($id)
+    {
+        try {
+            // Get user information
+            $users = User::findOrFail($id);
+
+            $show_user = User::where('id',$id)->withTrashed()->first();
+
+
+            $user_raw_array = $users->id;
+           // if (!config('app.lock_passwords')) {
+
+
+
+              $assets = Asset::where('assigned_to', $id)->where('assigned_type', User::class)->with('model', 'model.category')->get();
+              $licenses = $show_user->licenses()->get();
+              $accessories = $show_user->accessories()->get();
+              $consumables = $show_user->consumables()->get();
+
+
+
+                foreach ($assets as $asset) {
+
+                    
+                    $asset_array[] = $asset->id;
+
+                    // Update the asset log
+                    $logAction = new Actionlog();
+                    $logAction->item_id = $asset->id;
+                    $logAction->item_type = Asset::class;
+                    $logAction->target_id = $asset->assigned_to;
+                    $logAction->target_type = User::class;
+                    $logAction->user_id = Auth::user()->id;
+                    $logAction->note = 'Bulk checkin asset';
+                    $logAction->logaction('checkin from');
+
+                    
+                    Asset::whereIn('id', $asset_array)->update([
+                                'assigned_to' => null,
+                    ]);
+                    
+                }
+
+                foreach ($accessories as $accessory) {
+                    $accessory_array[] = $accessory->accessory_id;
+                    // Update the asset log
+                    $logAction = new Actionlog();
+                    $logAction->item_id = $accessory->id;
+                    $logAction->item_type = Accessory::class;
+                    $logAction->target_id = $accessory->assigned_to;
+                    $logAction->target_type = User::class;
+                    $logAction->user_id = Auth::user()->id;
+                    $logAction->note = 'Bulk checkin accessory';
+                    $logAction->logaction('checkin from');
+                }
+
+                foreach ($licenses as $license) {
+                    $license_array[] = $license->id;
+                    // Update the asset log
+                    $logAction = new Actionlog();
+                    $logAction->item_id = $license->id;
+                    $logAction->item_type = License::class;
+                    $logAction->target_id = $license->assigned_to;
+                    $logAction->target_type = User::class;
+                    $logAction->user_id = Auth::user()->id;
+                    $logAction->note = 'Bulk checkin license';
+                    $logAction->logaction('checkin from');
+                }
+
+
+
+                return redirect()->route('users.index')->with('success', 'You have checked in all the items.');
+           
+        } catch (ModelNotFoundException $e) {
+            // Prepare the error message
+            $error = trans('admin/users/message.user_not_found', compact('id'));
+            // Redirect to the user management page
+            return redirect()->route('users.index')->with('error', $error);
+        }
+        
+    }
+
+
 
     /**
     * Soft-delete bulk users
