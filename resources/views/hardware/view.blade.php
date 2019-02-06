@@ -98,8 +98,13 @@
         <li class="pull-right"><a href="#" data-toggle="modal" data-target="#uploadFileModal">
             <i class="fa fa-paperclip"></i> {{ trans('button.upload') }}</a>
         </li>
+        
         @endcan
       </ul>
+
+
+    </div>
+
       <div class="tab-content">
         <div class="tab-pane fade in active" id="details">
           <div class="row">
@@ -414,7 +419,19 @@
                           {{ \App\Helpers\Helper::getFormattedDateObject($asset->expected_checkin, 'datetime', false) }}
                         </td>
                       </tr>
+                      <button type="submit" class="btn btn-success pull-right" onclick="window.location.href='{{ route('checkin/hardware', $asset->id) }}'">
+                        {{ trans('general.checkin') }}</button>
+
+                        @else
+                        <button type="submit" class="btn btn-success pull-right" onclick="window.location.href='{{ route('checkout/hardware', $asset->id) }}'">
+                          {{ trans('general.checkout') }}</button>
                     @endif
+
+                   
+        
+               
+                      
+                    
 
                     <tr>
                       <td>{{ trans('admin/hardware/form.notes') }}</td>
