@@ -138,6 +138,8 @@ class ViewAssetsController extends Controller
 
 
 
+            
+
             return redirect()->route('requestable-assets')->with('success')->with('success', trans('admin/hardware/message.requests.success'));
         }
     }
@@ -146,7 +148,40 @@ class ViewAssetsController extends Controller
 
 
 
+    // GRIFU
+    public function getRequestView($assetId = null)
+    {
+        // Isto pode voltar para a outra função
+       // return view('hardware/requestout', compact('asset'));
 
+       $user = Auth::user();
+
+       // Check if the asset exists and is requestable
+       if (is_null($asset = Asset::RequestableAssets()->find($assetId))) {
+           return redirect()->route('requestable-assets')
+               ->with('error', trans('admin/hardware/message.does_not_exist_or_not_requestable'));
+       } elseif (!Company::isCurrentUserHasAccess($asset)) {
+           return redirect()->route('requestable-assets')
+               ->with('error', trans('general.insufficient_permissions'));
+       }
+
+       $data['item'] = $asset;
+       $data['target'] =  Auth::user();
+       $data['item_quantity'] = 1;
+       $settings = Setting::getSettings();
+
+
+       return View::make('hardware/requestout', compact('asset'));
+
+       $logaction->logaction('requested');
+       $asset->request();
+       $asset->increment('requests_counter', 1);
+         $settings->notify(new RequestAssetNotification($data));
+         
+       //return $logaction->item_id;
+    }
+
+// GRIFU
     public function getRequestAsset($assetId = null)
     {
 
@@ -164,6 +199,30 @@ class ViewAssetsController extends Controller
         $data['item'] = $asset;
         $data['target'] =  Auth::user();
         $data['item_quantity'] = 1;
+
+
+        $data['note'] = e(Input::get('note'));
+        
+        $user_responsible = e(Input::get('responsible'));
+        $data['responsible'] = $user_responsible;
+        $data['check_out'] = e(Input::get('checkout_at'));
+        $data['check_in'] = e(Input::get('expected_checkin'));
+        $data['fieldset'] = e(Input::get('fieldset'));
+
+
+        /*
+        foreach($model->fieldset->fields AS $field) :
+            if ($field->element=='listbox'){
+
+                $cena = $item->$field->db_column_name();
+                $data[$item->$field->db_column_name()] = e(Input::get($item->$field->db_column_name()));
+            }
+
+
+        endforeach;
+*/
+
+
         $settings = Setting::getSettings();
 
         $logaction = new Actionlog();
@@ -171,6 +230,7 @@ class ViewAssetsController extends Controller
         $logaction->item_type = $data['item_type'] = Asset::class;
         $logaction->created_at = $data['requested_date'] = date("Y-m-d H:i:s");
 
+        
         if ($user->location_id) {
             $logaction->location_id = $user->location_id;
         }
@@ -179,7 +239,9 @@ class ViewAssetsController extends Controller
 
 
         // If it's already requested, cancel the request.
+        /*
         if ($asset->isRequestedBy(Auth::user())) {
+            
             $asset->cancelRequest();
             $asset->decrement('requests_counter', 1);
             
@@ -187,19 +249,106 @@ class ViewAssetsController extends Controller
             $settings->notify(new RequestAssetCancelationNotification($data));
             return redirect()->route('requestable-assets')
                 ->with('success')->with('success', trans('admin/hardware/message.requests.cancel-success'));
+                
         } else {
+            */
+if (!$asset->isRequestedBy(Auth::user())) {
+            
 
-            $logaction->logaction('requested');
-            $asset->request();
-            $asset->increment('requests_counter', 1);
-            $settings->notify(new RequestAssetNotification($data));
+       //  $logaction->logaction('requested');
+      //   $asset->request();
+       //  $asset->increment('requests_counter', 1);
 
 
+       $user = User::find($user_responsible);
+       $user->notify(new RequestAssetNotification($data));
+
+       $settings->notify(new RequestAssetNotification($data));
+            
+        // ORIGINAL
             return redirect()->route('requestable-assets')->with('success')->with('success', trans('admin/hardware/message.requests.success'));
         }
 
 
     }
+
+
+    public function store($assetId = null, $backto = null)
+    {
+        // Check if the asset exists
+        if (is_null($asset = Asset::find($assetId))) {
+            // Redirect to the asset management page with error
+            return redirect()->route('hardware.index')->with('error', trans('admin/hardware/message.does_not_exist'));
+        }
+
+        $this->authorize('checkin', $asset);
+
+        if ($asset->assignedType() == Asset::USER) {
+            $user = $asset->assignedTo;
+        }
+        if (is_null($target = $asset->assignedTo)) {
+            return redirect()->route('hardware.index')->with('error', trans('admin/hardware/message.checkin.already_checked_in'));
+        }
+
+        $asset->expected_checkin = null;
+        $asset->last_checkout = null;
+        $asset->assigned_to = null;
+        $asset->assignedTo()->disassociate($asset);
+        $asset->assigned_type = null;
+        $asset->accepted = null;
+        $asset->name = e($request->get('name'));
+
+        if ($request->has('status_id')) {
+            $asset->status_id =  e($request->get('status_id'));
+        }
+
+        $asset->location_id = $asset->rtd_location_id;
+
+        if ($request->has('location_id')) {
+            $asset->location_id =  e($request->get('location_id'));
+        }
+
+        // Was the asset updated?
+        if ($asset->save()) {
+            $logaction = $asset->logCheckin($target, e(request('note')));
+
+            $data['log_id'] = $logaction->id;
+            $data['first_name'] = get_class($target) == User::class ? $target->first_name : '';
+            $data['last_name'] = get_class($target) == User::class ? $target->last_name : '';
+            $data['item_name'] = $asset->present()->name();
+            $data['responsible'] = $logaction->responsible;
+            $data['checkout_at'] = $logaction->checkout_at;
+            $data['checkin_date'] = $logaction->created_at;
+            $data['fieldset'] = $logaction->fieldset;
+            $data['item_tag'] = $asset->asset_tag;
+            $data['item_serial'] = $asset->serial;
+            $data['note'] = $logaction->note;
+            $data['manufacturer_name'] = $asset->model->manufacturer->name;
+            $data['model_name'] = $asset->model->name;
+            $data['model_number'] = $asset->model->model_number;
+            $data['destination']= "luisleite@esmad.ipp.pt";
+            /*
+            foreach($model->fieldset->fields AS $field) :
+                if ($field->element=='listbox'){
+                    $data[$item->$field->db_column_name()] = e(Input::get($item->$field->db_column_name()));
+                }
+    
+    
+            endforeach;
+*/
+
+            if ($backto=='user') {
+                return redirect()->route("users.show", $user->id)->with('success', trans('admin/hardware/message.checkin.success'));
+            }
+            return redirect()->route("hardware.index")->with('success', trans('admin/hardware/message.checkin.success'));
+        }
+        // Redirect to the asset management page with error
+        return redirect()->route("hardware.index")->with('error', trans('admin/hardware/message.checkin.error'));
+    }
+
+
+
+
 
     public function getRequestedAssets()
     {
@@ -222,7 +371,7 @@ class ViewAssetsController extends Controller
         }
 
         $user = Auth::user();
-
+        
 
         // TODO - Fix this for non-assets
         if (($findlog->item_type==Asset::class) && ($user->id != $findlog->item->assigned_to)) {
