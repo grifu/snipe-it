@@ -36,6 +36,7 @@ return array(
     'i_have_read' => 'I have read and agree to the terms of use, and have received this item.',
     'item' => 'Item:',
     'Item_Request_Canceled' => 'Item Request Canceled',
+    'Item_Request_Approved' => 'Item Request Approved',
     'Item_Requested' => 'Item Requested',
     'link_to_update_password' => 'Please click on the following link to update your :web password:',
     'login_first_admin' => 'Login to your new Snipe-IT installation using the credentials below:',

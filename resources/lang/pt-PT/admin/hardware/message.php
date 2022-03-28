@@ -6,7 +6,14 @@ return array(
                         Se este estado mudou, por favor atualize o estado do artigo.',
     'does_not_exist' 	=> 'Artigo não existente.',
     'does_not_exist_or_not_requestable' => 'Boa tentativa. Esse artigo não existe ou não é solicitável.',
+    'no_requestID' 	    => 'Oops! O número de reserva não existe, por favor contactar o administrador.',
     'assoc_users'	 	=> 'Este artigo está correntemente alocado a um utilizador e não pode ser removido. Por favor devolva o artigo e de seguida tente remover novamente. ',
+    'no_responsible'	=> 'A reserva tem de ter um responsável. Deve ser identiticado o responsável no campo da reserva. ',
+    'canceled'	        => 'Nada para aprovar, a reserva foi cancelada ou já foi alocada.',
+    'isnot_responsible'	=> 'O utilizador identificado como responsável não tem permissões de responsável, deverá ser indicado um responsável com permissões. ',
+    'no_dates'	        => 'Faltou preencher uma das datas (levantamento ou devolução). A reserva deve identificar estas datas.',
+    'dateOverlap'       => 'Datas sobrepostas. As datas foram alteradas manualmente, utilizar o calendário para ecolher a data correctamente.',
+    'equal_dates'	=> 'A data/hora de levantamento não pode ser igual à data/hora entrega do ativo.',
 
     'create' => array(
         'error'   		=> 'Não foi possível criar o Artigo. Por favor, tente novamente. :(',
@@ -77,6 +84,8 @@ return array(
     'requests' => array(
         'error'   		=> 'Ativo não foi solicitado, por favor tente novamente',
         'success' 		=> 'Ativo solicitado com sucesso.',
+        'warning' 		=> 'O Ativo solicitado foi processado, mas a reserva estava incompleta. Deve ser identificado o projecto e o curso no campo das notas.',
+        'incomplete'    => 'Não foram processadas todas as datas da reserva recorrente pois algumas das datas estão sobrepostas com outras reservas.',
         'canceled'      => 'Requisição cancelado com sucesso'
     )
 

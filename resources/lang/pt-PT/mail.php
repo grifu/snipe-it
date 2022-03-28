@@ -3,8 +3,10 @@
 return array(
     'a_user_canceled' => 'Um utilizador cancelou um pedido de artigo no site',
     'a_user_requested' => 'Um utilizador solicitou um artigo no site',
+    'a_user_approved' => 'A sua reserva foi aprovada, pode levantar o recurso',
     'accessory_name' => 'Nome do acessório:',
     'additional_notes' => 'Notas adicionais:',
+    'Item Request Approved' => 'Reserva aprovada',
     'admin_has_created' => 'Um administrador criou uma conta para ti no :web site.',
     'asset' => 'Artigo:',
     'asset_name' => 'Nome do Artigo:',

@@ -181,6 +181,80 @@ class UsersController extends Controller
 
 
 
+    /*
+     * GRIFU | Modification
+     *
+     * Trying to show a list of responsible users
+    */
+
+   
+    public function responsiblelist(Request $request)
+    {
+
+        $responsibleid = $request->route()->getAction()['userids'];
+
+        $search = '"assets.responsible":"1"';
+      //  $userResponsibleGroup =  DB::table('groups')->where('permissions', 'LIKE', '%'.$search.'%')->pluck('id');        
+      //  $userResponsibleIDs =  DB::table('users_groups')->whereIn('group_id', $userResponsibleGroup)->pluck('user_id');
+       // $usersOpen = DB::table('users')->select();
+
+       
+
+        $users = User::select(
+            [
+                'users.id',
+                'users.username',
+                'users.employee_num',
+                'users.first_name',
+                'users.last_name',
+                'users.gravatar',
+                'users.avatar',
+                'users.email',
+            ]
+            )->whereIn('id', $responsibleid);
+
+        $users = Company::scopeCompanyables($users);
+
+        
+
+        if ($request->has('search')) {
+            $users = $users->where('first_name', 'LIKE', '%'.$request->get('search').'%')
+                ->orWhere('last_name', 'LIKE', '%'.$request->get('search').'%')
+                ->orWhere('username', 'LIKE', '%'.$request->get('search').'%')
+                ->orWhere('employee_num', 'LIKE', '%'.$request->get('search').'%');
+        }
+
+        $users = $users->orderBy('last_name', 'asc')->orderBy('first_name', 'asc');
+        $users = $users->paginate(50);
+
+        foreach ($users as $user) {
+            $name_str = '';
+            if ($user->last_name!='') {
+                $name_str .= e($user->last_name).', ';
+            }
+            $name_str .= e($user->first_name);
+
+            if ($user->username!='') {
+                $name_str .= ' ('.e($user->username).')';
+            }
+
+            if ($user->employee_num!='') {
+                $name_str .= ' - #'.e($user->employee_num);
+            }
+
+            $user->use_text = $name_str;
+            $user->use_image = ($user->present()->gravatar) ? $user->present()->gravatar : null;
+        }
+
+        
+
+        return (new SelectlistTransformer)->transformSelectlist($users);
+
+    }
+
+
+
+
     /**
      * Store a newly created resource in storage.
      *

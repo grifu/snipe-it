@@ -29,12 +29,14 @@ class RequestAssetNotification extends Notification
         $this->item_type = $params['item_type'];
         $this->item_quantity = $params['item_quantity'];
         $this->responsible = '';
+       // $this->$request_id = $params['request_id'];
         $this->note = '';
         $this->check_out = '';
         $this->check_in = '';
         $this->url_aproval = url('/invoice/');
         $this->last_checkout = '';
         $this->expected_checkin = '';
+        
         $this->requested_date = \App\Helpers\Helper::getFormattedDateObject($params['requested_date'], 'datetime',
             false);
         $this->settings = Setting::getSettings();
@@ -46,7 +48,10 @@ class RequestAssetNotification extends Notification
 
         }
         
-
+        if (array_key_exists('request_id', $params)) {
+            $this->request_id = $params['request_id'];
+        }
+        
         if (array_key_exists('note', $params)) {
             $this->note = $params['note'];
         }
@@ -79,7 +84,7 @@ class RequestAssetNotification extends Notification
 
     /**
      * Route notifications for the mail channel.
-     * GRIFU
+     * GRIFU | Modification
      * https://laravel.com/docs/5.7/notifications
      * @param  \Illuminate\Notifications\Notification  $notification
      * @return string
@@ -123,6 +128,7 @@ class RequestAssetNotification extends Notification
         $check_out = $this->check_out;
         $check_in = $this->check_in;
         $responsible = $this->responsible;
+        $request_id = $this->request_id;
         $botname = ($this->settings->slack_botname) ? $this->settings->slack_botname : 'Snipe-Bot' ;
 
         $fields = [
@@ -130,19 +136,19 @@ class RequestAssetNotification extends Notification
             'Requested By' => '<'.$target->present()->viewUrl().'|'.$target->present()->fullName().'>',
         ];
 
-        //GRIFU
-
+        //GRIFU | Modification
 
         return (new SlackMessage)
             ->content(trans('mail.Item_Requested'))
             ->cc(['luisleite@esmad.ipp.pt'])
             ->from($botname)
-            ->attachment(function ($attachment) use ($item, $note, $fields, $responsible, $check_in, $check_out) {
+            ->attachment(function ($attachment) use ($item, $note, $fields, $responsible, $request_id, $check_in, $check_out) {
                 $attachment->title(htmlspecialchars_decode($item->present()->name), $item->present()->viewUrl())
                     ->fields($fields)
                     ->content($check_in)
                     ->content($check_out)
                     ->content($responsible)
+                    ->content($request_id)
                     ->content($note);
             });
     }
@@ -184,6 +190,7 @@ class RequestAssetNotification extends Notification
                 'check_in'     => $this->check_in,
                 'check_out'     => $this->check_out,
                 'url_aproval'   => $this->url_aproval,
+                'request_id'    => $this->request_id,
                 'intro_text'        => trans('mail.a_user_requested'),
                 'qty'           => $this->item_quantity,
             ])

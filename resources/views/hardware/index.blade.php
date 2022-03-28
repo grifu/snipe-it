@@ -69,6 +69,7 @@
                   <option value="labels">Generate Labels</option>
                 </select>
                 <button class="btn btn-primary" id="bulkEdit" disabled>Go</button>
+                
               </div>
               @endif
 
@@ -97,7 +98,7 @@
                     'status_id'=>e(Input::get('status_id')))) }}"
                 data-export-options='{
                 "fileName": "export{{ (Input::has('status')) ? '-'.str_slug(Input::get('status')) : '' }}-assets-{{ date('Y-m-d') }}",
-                "ignoreColumn": ["actions","image","change","checkbox","checkincheckout","icon"]
+                "ignoreColumn": ["actions","image","change","checkbox","checkincheckout","extended","icon"]
                 }'>
               </table>
 

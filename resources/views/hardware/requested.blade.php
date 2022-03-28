@@ -12,7 +12,6 @@
 
 {{-- Page content --}}
 @section('content')
-
     <div class="row">
         <div class="col-md-12">
             <div class="box">
@@ -50,15 +49,15 @@
                         <th class="col-md-2">Item Name</th>
                         <th class="col-md-2" data-sortable="true">{{ trans('admin/hardware/table.location') }}</th>
                         <th class="col-md-2" data-sortable="true">{{ trans('admin/hardware/form.expected_checkin') }}</th>
-                        <th class="col-md-3" data-sortable="true">Requesting User</th>
+                        <th class="col-md-3" data-sortable="true">Requisitante</th>
                         <th class="col-md-2">Requested Date</th>
                         <th class="col-md-1"></th>
                         <th class="col-md-1"></th>
                     </tr>
                 </thead>
+                
                 <tbody>
                     @foreach ($requestedItems as $request)
-
                         @if ($request->requestable)
                     <tr>
                             {{ csrf_field() }}

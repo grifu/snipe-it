@@ -62,10 +62,34 @@ Route::group(
 
         Route::post('{assetId}/clone', 'AssetsController@postCreate');
 
+        Route::get('{assetId}/checkoutRequest/{requestId}', [
+            'as' => 'checkout/hardware',
+            'uses' => 'AssetCheckoutController@createRequest', '{requestId}'
+        ]);
+
+        Route::get('{assetId}/checkoutExtend/{requestId}', [
+            'as' => 'checkout/hardware',
+            'uses' => 'AssetCheckoutController@extendRequest', '{requestId}'
+        ]);
+
+        Route::post('{assetId}/checkoutExtend/{requestId}', [
+            'as' => 'checkout/hardware',
+            'uses' => 'AssetCheckoutController@storeExtension', '{requestId}'
+        ]);
+
         Route::get('{assetId}/checkout', [
             'as' => 'checkout/hardware',
             'uses' => 'AssetCheckoutController@create'
         ]);
+
+        Route::post('{assetId}/checkoutRequest/{requestId}', [
+            'as' => 'checkout/hardware',
+            'uses' => 'AssetCheckoutController@store', '{requestId}'
+        ]);
+      
+    
+
+
         Route::post('{assetId}/checkout', [
             'as' => 'checkout/hardware',
             'uses' => 'AssetCheckoutController@store'

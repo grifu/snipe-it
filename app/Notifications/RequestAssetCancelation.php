@@ -29,11 +29,14 @@ class RequestAssetCancelationNotification extends Notification
         $this->expected_checkin = '';
         $this->requested_date = \App\Helpers\Helper::getFormattedDateObject($params['requested_date'], 'datetime',
             false);
+        
         $this->settings = Setting::getSettings();
 
         if (array_key_exists('note', $params)) {
             $this->note = $params['note'];
         }
+
+  
 
         if ($this->item->last_checkout) {
             $this->last_checkout = \App\Helpers\Helper::getFormattedDateObject($this->item->last_checkout, 'date',
@@ -70,6 +73,7 @@ class RequestAssetCancelationNotification extends Notification
         return $notifyBy;
     }
 
+
     public function toSlack()
     {
 
@@ -78,6 +82,7 @@ class RequestAssetCancelationNotification extends Notification
         $item = $this->item;
         $note = $this->note;
         $qty = $this->item_quantity;
+        
         $botname = ($this->settings->slack_botname) ? $this->settings->slack_botname : 'Snipe-Bot' ;
 
         $fields = [
@@ -104,8 +109,12 @@ class RequestAssetCancelationNotification extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail()
+
+     
+    public function toMail($notifiable)
     {
+
+    
 
         $fields = [];
 

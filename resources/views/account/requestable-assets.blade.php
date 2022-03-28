@@ -67,7 +67,7 @@
                 </div>
             </div>
 
-                <div class="tab-pane fade" id="models">
+                <div class="tab-pane fade" id="models_grifu_removed_this_feature_temporarily">
                     <div class="row">
                         <div class="col-md-12">
 

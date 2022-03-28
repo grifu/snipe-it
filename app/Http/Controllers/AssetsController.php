@@ -39,6 +39,7 @@ use TCPDF;
 use Validator;
 use View;
 use App\Models\CheckoutRequest;
+use App\Models\RequestedAsset;
 
 /**
  * This class controls all actions related to assets for
@@ -792,15 +793,20 @@ class AssetsController extends Controller
 
     public function getRequestedIndex($user_id = null)
     {
+
+        // GRIFU | Modification.
+        // Call the request table view (requestedAssets.blade.php)
+        // Need to pass to the view (after $requests) the assigned_to from the assets table
+        // This can be done with a joint ->join('assets', 'id', '=', 'asset_id')
+        // At this moment, the view is processing all the data without any optimization such as (\App\Models\Asset::find($requests->asset_id)->assigned_to == null))
+        // this is wrong, and should be optimized. 
+
         $requestedItems = CheckoutRequest::with('user', 'requestedItem')->whereNull('canceled_at')->with('user', 'requestedItem');
 
-        if ($user_id) {
-            $requestedItems->where('user_id', $user_id)->get();
-        }
-
-        $requestedItems = $requestedItems->orderBy('created_at', 'desc')->get();
-
-        return view('hardware/requested', compact('requestedItems'));
+       // less than 3 because 0 = waiting approval; 1 - Approved; 2 - Denied; 3 - Canceled; 4 - Fullfield, checkedout 
+        $requestedAssets =  RequestedAsset::orderBy('expected_checkout','desc')->where('request_state','<',2)->get();
+        
+        return view('hardware/requestedAssets', compact('requestedAssets'));
     }
 
 }

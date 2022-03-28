@@ -269,10 +269,9 @@ Route::group([ 'prefix' => 'account', 'middleware' => ['auth']], function () {
 
 
  
-
-    // GRIFU
-    // Requestable-asset.blade faz um post do snipe-it.dev/account/request-asset/302?
-    // É ativado a função getRequestAsset do ViewAssetController.php
+    // GRIFU | Modification
+    // Requestable-asset.blade calls a post to snipe-it.dev/account/request-asset/number?
+    // It is activated through the function getRequestAsset from ViewAssetController.php
     
     Route::get(
         'request-asset/{assetId}',
@@ -282,7 +281,7 @@ Route::group([ 'prefix' => 'account', 'middleware' => ['auth']], function () {
 
     
 
-    // GRIFU
+    // GRIFU | Modification
     // Process the request 
     Route::post(
         'requestout-asset/{assetId}',
@@ -291,13 +290,23 @@ Route::group([ 'prefix' => 'account', 'middleware' => ['auth']], function () {
 
 
 
+    // GRIFU | Modification
+    // Aprove request 
+   // Route::get('aproverequest/{requestId}', [ 'as' => 'requests', 'uses' => 'ViewAssetsController@approveRequestAsset' ]);
 
+    
+    Route::get(
+        'aproverequest/{requestId}/{approval?}',
+        [ 'as' => 'requests', 'uses' => 'ViewAssetsController@approveRequestAsset']
+    );
 
     Route::post(
         'request/{itemType}/{itemId}',
         [ 'as' => 'account/request-item', 'uses' => 'ViewAssetsController@getRequestItem']
     );
 
+
+ 
 
     # Account Dashboard
     Route::get('/', [ 'as' => 'account', 'uses' => 'ViewAssetsController@getIndex' ]);

@@ -498,7 +498,7 @@ class UsersController extends Controller
 
     /**
     * Bulk check-in
-    *
+    * GRIFU | Modification
     * @author [Grifu, adaped from A. Gianotto] [<snipe@snipe.net>]
     * @since [v1.0]
     * @return \Illuminate\Http\RedirectResponse
@@ -508,21 +508,13 @@ class UsersController extends Controller
         try {
             // Get user information
             $users = User::findOrFail($id);
-
             $show_user = User::where('id',$id)->withTrashed()->first();
-
-
-            $user_raw_array = $users->id;
-           // if (!config('app.lock_passwords')) {
-
-
+            $user_raw_array = $users->id;           
 
               $assets = Asset::where('assigned_to', $id)->where('assigned_type', User::class)->with('model', 'model.category')->get();
               $licenses = $show_user->licenses()->get();
               $accessories = $show_user->accessories()->get();
               $consumables = $show_user->consumables()->get();
-
-
 
                 foreach ($assets as $asset) {
 

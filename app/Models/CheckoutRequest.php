@@ -5,8 +5,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class CheckoutRequest extends Model
 {
+
     use SoftDeletes;
     protected $fillable = ['user_id'];
     protected $table = 'checkout_requests';
@@ -25,6 +27,7 @@ class CheckoutRequest extends Model
     {
         return $this->morphTo('requestable');
     }
+
 
     public function itemRequested() // Workaround for laravel polymorphic issue that's not being solved :(
     {

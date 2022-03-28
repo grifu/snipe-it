@@ -279,6 +279,15 @@ class AssetPresenter extends Presenter
             "visible" => true,
             "formatter" => "hardwareInOutFormatter",
         ];
+        $layout[] = [
+            "field" => "extended",
+            "searchable" => false,
+            "sortable" => false,
+            "switchable" => true,
+            "title" => trans('general.extend'),
+            "visible" => true,
+            "formatter" => "extendChekout",
+        ];
 
         $layout[] = [
             "field" => "actions",

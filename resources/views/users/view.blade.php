@@ -89,9 +89,14 @@
               <i class="fa fa-gear"></i> {{ trans('button.actions') }}
               <span class="caret"></span>
             </a>
+            
             <ul class="dropdown-menu">
               <li><a href="{{ route('users.edit', $user->id) }}">{{ trans('admin/users/general.edit') }}</a></li>
               <li><a href="{{ route('clone/user', $user->id) }}">{{ trans('admin/users/general.clone') }}</a></li>
+        
+              <li><a href="{{ route('users.bulkCheckin', $user->id) }}">{{ trans('admin/hardware/general.checkin') }}</a></li>
+        
+
               @if ((Auth::user()->id !== $user->id) && (!config('app.lock_passwords')) && ($user->deleted_at==''))
                 <li><a href="{{ route('users.destroy', $user->id) }}">{{ trans('button.delete') }}</a></li>
               @endif

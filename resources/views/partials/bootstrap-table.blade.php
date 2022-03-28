@@ -284,6 +284,14 @@
 
     }
 
+    //  GRIFU | Modification
+    function extendChekout(value, row) {    
+        if (row.assigned_to) {
+            return '<a href="{{ url('/') }}/hardware/' + row.id + '/checkoutExtend/' + row.id + '" class="btn btn-sm bg-yellow" data-tooltip="true" title="Check this item">{{ trans('general.extend') }}</a>';
+        }
+
+    }
+
     function genericCheckinCheckoutFormatter(destination) {
         return function (value,row) {
 

@@ -153,6 +153,17 @@
 
     <script>
 
+      // Function for finding the closest date
+      function closeDate(datas_calendario, data_selecionada){
+          let iclosest = Infinity;
+          datas_calendario.forEach(function(d) {     
+              const date = new Date(d);
+              if (moment(date).format('YYYY-MM-DD') >= moment(data_selecionada).format('YYYY-MM-DD') && (moment(date).format('YYYY-MM-DD') < moment(iclosest).format('YYYY-MM-DD'))) {
+                  iclosest = d;  
+              }
+          });
+          return new Date(iclosest);
+      }
 
 
         $.fn.datetimepicker.defaults.icons = {
@@ -168,23 +179,82 @@
         };
 
 
+        // GRIFU | Modification
+        var array = JSON.parse('{!! json_encode($requests) !!}');
+
+        console.log(array);
+        console.log(moment(array['expected_checkout']).format('YYYY-MM-DD')+'   '+array['expected_checkin']);
+
+        var $selectedDate = new Date();
+      // convert dates to IsoDates
+      var ISOdate = [];
+      array.forEach(function(item)
+      {
+        var currentDate = moment(item['expected_checkout']);
+        var stopDate = moment(item['expected_checkin']);
+        var curDate = new Date();
+        if (moment(currentDate).format('YYYY-MM-DD') == moment(curDate).format('YYYY-MM-DD')) { 
+            $selectedDate = moment($selectedDate).add(1, 'days').format('YYYY-MM-DD');
+        }
+        while (moment(currentDate).format('YYYY-MM-DD') <= moment(stopDate).format('YYYY-MM-DD')) {
+          ISOdate.push(moment(currentDate).format('YYYY-MM-DD'));
+          currentDate = moment(currentDate).add(1, 'days'); 
+        }
+      });
+
+
+        
+        var $datesArray = ISOdate.map( dateString => new Date(dateString) );
+        console.log(ISOdate);
 
         $('#checkout_at').datetimepicker({
           locale: 'pt', // Extract this from the language selection
-            maxDate: new Date(),  // today date
-         //   daysOfWeekDisabled: [0, 6],  // this should be set in the configuration 
-            format: 'YYYY-MM-DD HH:mm:ss'
+          maxDate: new Date(),  // today date
+          minDate: new Date(),  // today date
+          disabledDates: ISOdate,
+            format: 'YYYY-MM-DD HH:mm:ss',
         });
+
+
+        let closeDatas = new Date("2029-09-12");
+
+        // set the start date
+        $("#expected_checkin").on("dp.change", function (e) {
+            $('#expected_checkin').data("DateTimePicker").minDate($selectedDate);
+        });
+
+
+
+        $("#checkout_at").on("dp.change", function (e) {
+            $selectedDate = e.date.toDate();
+            closeDatas = closeDate($datesArray, $selectedDate);
+            var m = moment(closeDatas, 'YYYY-MM-DD');
+            if(m.isValid()) 
+            { 
+                if(Date("y-m-d", closeDatas) != new Date()){
+                    $('#expected_checkin').data("DateTimePicker").maxDate(closeDatas);
+                } else {
+                    $('#expected_checkin').data("DateTimePicker").maxDate(moment(closeDatas).add(1, 'days'));  
+                }
+            }
+            $('#expected_checkin').data("DateTimePicker").minDate($selectedDate);
+        });
+
+        // Check if this is required
+        $('#checkout_at').click(function() {
+            $('#EventDateStart').val('');
+            $('#EventDateEnd').val('');
+            $('#expected_checkin').data("DateTimePicker").minDate(false);
+            $('#expected_checkin').data("DateTimePicker").maxDate(false);
+            return false;
+        });
+
 
         $('#expected_checkin').datetimepicker({
-
           locale: 'pt', // Extract this from the language selection
-            minDate: new Date(),  // today date
-         //   daysOfWeekDisabled: [0, 6],  // this should be set in the configuration 
-            format: 'YYYY-MM-DD HH:mm:ss'
-            
-
+          disabledDates: ISOdate,
+          format: 'YYYY-MM-DD HH:mm:ss'  
         });
 
-           </script>
+      </script>
 @stop

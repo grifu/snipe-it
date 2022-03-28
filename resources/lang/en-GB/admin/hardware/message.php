@@ -7,6 +7,9 @@ return array(
     'does_not_exist' 	=> 'Asset does not exist.',
     'does_not_exist_or_not_requestable' => 'Nice try. That asset does not exist or is not requestable.',
     'assoc_users'	 	=> 'This asset is currently checked out to a user and cannot be deleted. Please check the asset in first, and then try deleting again. ',
+    'no_responsible'	=> 'The reservation must have a responsible, please choose a person that will be the responsible for thre reservation.',
+    'no_dates'	        => 'Missing dates (checkin or checkout). The reservation must have both dates filled.',
+    'equal_dates'	    => 'The date/time of checkout must be different from the date/time of checkin.',
 
     'create' => array(
         'error'   		=> 'Asset was not created, please try again. :(',
@@ -77,6 +80,7 @@ return array(
     'requests' => array(
         'error'   		=> 'Asset was not requested, please try again',
         'success' 		=> 'Asset requested successfully.',
+        'warning' 		=> 'Asset requested was processed but it was incomplete (the notes should be filled indentifying the class and the project) .',
         'canceled'      => 'Checkout request successfully canceled'
     )
 

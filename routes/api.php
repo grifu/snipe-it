@@ -327,7 +327,6 @@ Route::group(['prefix' => 'v1','namespace' => 'Api'], function () {
             'uses' => 'AssetsController@audit'
         ]);
 
-
         Route::post('{asset_id}/checkout',
             [
                 'as' => 'api.assets.checkout',
@@ -671,6 +670,28 @@ Route::group(['prefix' => 'v1','namespace' => 'Api'], function () {
             'parameters' => ['supplier' => 'supplier_id']
         ]
     ); // Suppliers resource
+
+
+  /*--- Responsible API ---*/
+
+  Route::group([ 'prefix' => 'responsible' ], function () {
+
+    // search for users that are responsible for aprove requests
+    $search = '"assets.responsible":"1"';
+    $userResponsibleGroup =  DB::table('groups')->where('permissions', 'LIKE', '%'.$search.'%')->pluck('id');
+    $userResponsibleIDs =  DB::table('users_groups')->whereIn('group_id', $userResponsibleGroup)->pluck('user_id');
+    $users = \App\Models\User::whereIn('id', $userResponsibleIDs)->pluck('id');
+
+    Route::get('selectlist/{name?}',
+        [
+            'as' => 'UsersController/responsiblelist',
+            'uses' => 'UsersController@responsiblelist', 'userids' => $users
+        ]
+    );
+
+}); // Users group
+
+
 
 
 

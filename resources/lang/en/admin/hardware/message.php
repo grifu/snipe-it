@@ -5,8 +5,16 @@ return array(
     'undeployable' 		=> '<strong>Warning: </strong> This asset has been marked as currently undeployable.
                         If this status has changed, please update the asset status.',
     'does_not_exist' 	=> 'Asset does not exist.',
+    'no_requestID' 	    => 'Oops! The request ID does not exist, please contact the administrator.',
     'does_not_exist_or_not_requestable' => 'Nice try. That asset does not exist or is not requestable.',
     'assoc_users'	 	=> 'This asset is currently checked out to a user and cannot be deleted. Please check the asset in first, and then try deleting again. ',
+    'no_responsible'	=> 'The reservation must have a responsible, please choose a person that will be the responsible for thre reservation.',
+    'canceled'	        => 'Nothing to aprove, the reservation was already canceled, or checked out.',
+    'isnot_responsible'	=> 'The user identifed as responsible does not have permissions as responsible, the reservation should be submited again with a valid responsible.',
+    'no_dates'	        => 'Missing dates (checkin or checkout). The reservation must have both dates filled.',
+    'dateOverlap'       => 'Date overlap. The dates were changed manually, use the calendar to select the correct date',
+    'equal_dates'	    => 'The date/time of checkout must be different from the date/time of checkin.',
+
 
     'create' => array(
         'error'   		=> 'Asset was not created, please try again. :(',
@@ -77,6 +85,8 @@ return array(
     'requests' => array(
         'error'   		=> 'Asset was not requested, please try again',
         'success' 		=> 'Asset requested successfully.',
+        'warning' 		=> 'Asset requested was processed but it was incomplete (the notes should be filled indentifying the class and the project) .',
+        'incomplete'    => 'Some of the dates from the recurrent reservation were not processed due to some overlaping dates with other reservations.',
         'canceled'      => 'Checkout request successfully canceled'
     )
 

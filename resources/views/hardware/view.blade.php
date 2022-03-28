@@ -1,5 +1,11 @@
 @extends('layouts/default')
 
+@can('checkout', \App\Models\Asset::class)
+{!! $userCheckout = '1' !!}
+@else
+ {!! $userCheckout = '0' !!}
+@endcan
+
 {{-- Page title --}}
 @section('title')
 {{ trans('admin/hardware/general.view') }} {{ $asset->asset_tag }}
@@ -412,21 +418,23 @@
 
 
 
-                    @if ($asset->expected_checkin!='')
-                      <tr>
-                        <td>{{ trans('admin/hardware/form.expected_checkin') }}</td>
-                        <td>
-                          {{ \App\Helpers\Helper::getFormattedDateObject($asset->expected_checkin, 'datetime', false) }}
-                        </td>
-                      </tr>
-                      <button type="submit" class="btn btn-success pull-right" onclick="window.location.href='{{ route('checkin/hardware', $asset->id) }}'">
-                        {{ trans('general.checkin') }}</button>
 
-                        @else
-                        <button type="submit" class="btn btn-success pull-right" onclick="window.location.href='{{ route('checkout/hardware', $asset->id) }}'">
-                          {{ trans('general.checkout') }}</button>
+                    @if( $userCheckout == 1)
+                      @if ($asset->expected_checkin!='')
+                        <tr>
+                          <td>{{ trans('admin/hardware/form.expected_checkin') }}</td>
+                          <td>
+                            {{ \App\Helpers\Helper::getFormattedDateObject($asset->expected_checkin, 'datetime', false) }}
+                          </td>
+                        </tr>
+                        <button type="submit" class="btn btn-success pull-right" onclick="window.location.href='{{ route('checkin/hardware', $asset->id) }}'">
+                          {{ trans('general.checkin') }}</button>
+
+                          @else
+                          <button type="submit" class="btn btn-success pull-right" onclick="window.location.href='{{ route('checkout/hardware', $asset->id) }}'">
+                            {{ trans('general.checkout') }}</button>
+                      @endif
                     @endif
-
                    
         
                

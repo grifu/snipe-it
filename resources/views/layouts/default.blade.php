@@ -20,6 +20,8 @@
     <!-- bootstrap tables CSS -->
     <link rel="stylesheet" href="{{ url(asset('css/bootstrap-table.css')) }}">
 
+    <link rel="stylesheet" href="{{ url(asset('css/bootstrap-datetimepicker.css')) }}">
+
     <link rel="stylesheet" href="{{ url(mix('css/dist/all.css')) }}">
 
     <link rel="shortcut icon" type="image/ico" href="{{ url(asset('favicon.ico')) }}">
@@ -187,6 +189,8 @@
                   </form>
                   @endcan
 
+
+                  
                   @can('admin')
                   <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -202,6 +206,7 @@
                               </a>
                       </li>
                        @endcan
+
                        @can('create', \App\Models\License::class)
                        <li {!! (Request::is('licenses/create') ? 'class="active"' : '') !!}>
                            <a href="{{ route('licenses.create') }}">
@@ -241,6 +246,7 @@
                                  </a>
                              </li>
                          @endcan
+
                    </ul>
                 </li>
                @endcan
@@ -385,60 +391,62 @@
               </a>
             </li>
             @endcan
-            @can('index', \App\Models\Asset::class)
+            
             <li class="treeview{{ (Request::is('hardware*') ? ' active' : '') }}">
                 <a href="#"><i class="fa fa-barcode"></i>
                   <span>{{ trans('general.assets') }}</span>
                   <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                  <li>
-                    <a href="{{ url('hardware') }}">
-                        {{ trans('general.list_all') }}
-                    </a>
-                  </li>
-
-                    <?php $status_navs = \App\Models\Statuslabel::where('show_in_nav', '=', 1)->get(); ?>
-                    @if (count($status_navs) > 0)
-                        <li class="divider">&nbsp;</li>
-                        @foreach ($status_navs as $status_nav)
-                            <li><a href="{{ route('statuslabels.show', ['id' => $status_nav->id]) }}"}> {{ $status_nav->name }}</a></li>
-                        @endforeach
-                    @endif
-
-
-                  <li{!! (Request::query('status') == 'Deployed' ? ' class="active"' : '') !!}>
-                    <a href="{{ url('hardware?status=Deployed') }}"><i class="fa fa-circle-o text-blue"></i>
-                        {{ trans('general.all') }}
-                        {{ trans('general.deployed') }}
-                    </a>
-                  </li>
-                  <li{!! (Request::query('status') == 'RTD' ? ' class="active"' : '') !!}>
-                    <a href="{{ url('hardware?status=RTD') }}">
-                        <i class="fa fa-circle-o text-green"></i>
-                        {{ trans('general.all') }}
-                        {{ trans('general.ready_to_deploy') }}
-                    </a>
-                  </li>
-                  <li{!! (Request::query('status') == 'Pending' ? ' class="active"' : '') !!}><a href="{{ url('hardware?status=Pending') }}"><i class="fa fa-circle-o text-orange"></i>
-                          {{ trans('general.all') }}
-                          {{ trans('general.pending') }}
-                      </a>
-                  </li>
-                  <li{!! (Request::query('status') == 'Undeployable' ? ' class="active"' : '') !!} ><a href="{{ url('hardware?status=Undeployable') }}"><i class="fa fa-times text-red"></i>
-                          {{ trans('general.all') }}
-                          {{ trans('general.undeployable') }}
-                      </a>
-                  </li>
-                  <li{!! (Request::query('status') == 'Archived' ? ' class="active"' : '') !!}><a href="{{ url('hardware?status=Archived') }}"><i class="fa fa-times text-red"></i>
-                          {{ trans('general.all') }}
-                          {{ trans('admin/hardware/general.archived') }}
-                          </a>
-                  </li>
-                    <li{!! (Request::query('status') == 'Requestable' ? ' class="active"' : '') !!}><a href="{{ url('hardware?status=Requestable') }}"><i class="fa fa-check text-blue"></i>
-                        {{ trans('admin/hardware/general.requestable') }}
+                    @can('index', \App\Models\Asset::class)
+                    <li>
+                        <a href="{{ url('hardware') }}">
+                            {{ trans('general.list_all') }}
                         </a>
                     </li>
+                    
+                        <?php $status_navs = \App\Models\Statuslabel::where('show_in_nav', '=', 1)->get(); ?>
+                        @if (count($status_navs) > 0)
+                            <li class="divider">&nbsp;</li>
+                            @foreach ($status_navs as $status_nav)
+                                <li><a href="{{ route('statuslabels.show', ['id' => $status_nav->id]) }}"}> {{ $status_nav->name }}</a></li>
+                            @endforeach
+                        @endif
+
+                        
+                    <li{!! (Request::query('status') == 'Deployed' ? ' class="active"' : '') !!}>
+                        <a href="{{ url('hardware?status=Deployed') }}"><i class="fa fa-circle-o text-blue"></i>
+                            {{ trans('general.all') }}
+                            {{ trans('general.deployed') }}
+                        </a>
+                    </li>
+                    <li{!! (Request::query('status') == 'RTD' ? ' class="active"' : '') !!}>
+                        <a href="{{ url('hardware?status=RTD') }}">
+                            <i class="fa fa-circle-o text-green"></i>
+                            {{ trans('general.all') }}
+                            {{ trans('general.ready_to_deploy') }}
+                        </a>
+                    </li>
+                    <li{!! (Request::query('status') == 'Pending' ? ' class="active"' : '') !!}><a href="{{ url('hardware?status=Pending') }}"><i class="fa fa-circle-o text-orange"></i>
+                            {{ trans('general.all') }}
+                            {{ trans('general.pending') }}
+                        </a>
+                    </li>
+                    <li{!! (Request::query('status') == 'Undeployable' ? ' class="active"' : '') !!} ><a href="{{ url('hardware?status=Undeployable') }}"><i class="fa fa-times text-red"></i>
+                            {{ trans('general.all') }}
+                            {{ trans('general.undeployable') }}
+                        </a>
+                    </li>
+                    <li{!! (Request::query('status') == 'Archived' ? ' class="active"' : '') !!}><a href="{{ url('hardware?status=Archived') }}"><i class="fa fa-times text-red"></i>
+                            {{ trans('general.all') }}
+                            {{ trans('admin/hardware/general.archived') }}
+                            </a>
+                    </li>
+                        <li{!! (Request::query('status') == 'Requestable' ? ' class="active"' : '') !!}><a href="{{ url('hardware?status=Requestable') }}"><i class="fa fa-check text-blue"></i>
+                            {{ trans('admin/hardware/general.requestable') }}
+                            </a>
+                        </li>
+                    @endcan
 
                   <li class="divider">&nbsp;</li>
                     @can('checkout', \App\Models\Asset::class)
@@ -447,11 +455,13 @@
                             {{ trans('general.bulk_checkout') }}
                         </a>
                     </li>
+                    @endcan
+                    
                     <li{!! (Request::is('hardware/requested') ? ' class="active>"' : '') !!}>
                         <a href="{{ route('assets.requested') }}">
                             {{ trans('general.requested') }}</a>
                     </li>
-                    @endcan
+                    
 
                     @can('create', \App\Models\Asset::class)
                       <li{!! (Request::query('Deleted') ? ' class="active"' : '') !!}>
@@ -479,7 +489,7 @@
                     @endcan
                 </ul>
               </li>
-              @endcan
+            
               @can('view', \App\Models\License::class)
               <li{!! (Request::is('licenses*') ? ' class="active"' : '') !!}>
                   <a href="{{ route('licenses.index') }}">
@@ -684,6 +694,19 @@
             </a>
             </li>
             @endcan
+
+            <!-- GRIFU | Modification : Special Button for the technical staff with managment priviliages -->
+            @can('create', \App\Models\Asset::class)
+            <li{!! (Request::is('account/requestable-assets') ? ' class="active"' : '') !!}>
+            <a href="{{ route('assets.requested') }}">
+            <i class="fa fa-paperclip"></i>
+            <span>{{ trans('general.requested') }}</a></span>
+            </a>
+            </li>
+            @endcan
+
+            
+            
           </ul>
         </section>
         <!-- /.sidebar -->

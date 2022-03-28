@@ -90,6 +90,19 @@ return array(
         ),
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | GRIFU | Modification. Add responsible to this.
+        |--------------------------------------------------------------------------
+        */
+
+        array(
+            'permission' => 'assets.responsible',
+            'label'      => 'Responsible ',
+            'note'       => 'The user is responsible for aprove reservations.',
+            'display'    => true,
+        ),
+
         array(
             'permission' => 'assets.view.requestable',
             'label'      => 'View Requestable Assets',

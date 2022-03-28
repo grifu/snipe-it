@@ -41,6 +41,15 @@ Route::group([ 'prefix' => 'users', 'middleware' => ['auth']], function () {
             'uses' => 'UsersController@postBulkSave',
         ]
     );
+
+
+    Route::get(
+        '{userId}/bulkCheckin',
+        [ 'as' => 'users.bulkCheckin', 'uses' => 'UsersController@bulkCheckin' ]
+    );
+
+
+
     Route::post(
         'bulkeditsave',
         [
