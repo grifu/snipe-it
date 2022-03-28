@@ -45,7 +45,7 @@ mix
     './node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js',
     './node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.js',
     './node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-    './public/js//bootstrap-datetimepicker.min.js',
+    './public/js/bootstrap-datetimepicker.min.js',
     './node_modules/icheck/icheck.js',
     './node_modules/ekko-lightbox/dist/ekko-lightbox.js',
     './resources/assets/js/app.js', //this is part of AdminLTE
