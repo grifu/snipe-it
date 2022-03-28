@@ -14,6 +14,16 @@ __This is web-based software__. This means there there is no executable file (ak
 
 -----
 
+## FORK of Snipe-IT Version v4.6.4 - build 3885 (master) 
+This is an experimental and devleopment version of Snipe-IT that implements some features such as a reservation system.
+Be aware that this was just a test and should not be used. This version is just for reference for development.
+
+You can try to install, but probably it will not work.
+
+This is based on the 4.6.4 version. Snipe-it is now in version 6.
+
+-----
+
 ### Installation
 
 For instructions on installing and configuring Snipe-IT on your server, check out the [installation manual](https://snipe-it.readme.io/docs). (Please see the [requirements documentation](https://snipe-it.readme.io/docs/requirements) for full requirements.)
