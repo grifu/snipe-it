@@ -22,8 +22,16 @@ You can try to install, but probably it will not work.
 
 This is based on the 4.6.4 version. Snipe-it is now in version 6.
 
------
 
+-----
+## CHANGES and Features
+
+- Reservation system
+- Date and time
+- Privileges for a Responsible user that approves reservations
+- soon will add other features and changes
+
+-----
 ### Installation
 
 For instructions on installing and configuring Snipe-IT on your server, check out the [installation manual](https://snipe-it.readme.io/docs). (Please see the [requirements documentation](https://snipe-it.readme.io/docs/requirements) for full requirements.)
